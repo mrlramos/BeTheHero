@@ -7,9 +7,10 @@ exports.up = function(knex) {
         table.string('description').notNullable();
         table.decimal('value').notNullable();
 
-        table.string('nog_id').notNullable();
+        table.string('ngo_id').notNullable();
 
-        table.foreign('ng_id').references('id').inTable('nogs');
+        table.foreign('ngo_id').references('id').inTable('ngos');
+        
     });
 };
 

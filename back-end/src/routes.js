@@ -1,30 +1,20 @@
 const express = require('express');
-const crypto = require('crypto');
-
-const connection = require('./database/connection');
+const NgoController = require('./controllers/NgoController');
+const IncidentController = require('./controllers/IncidentController');
+const ProfileController = require('./controllers/ProfileController');
+const SessionController = require('./controllers/SessionController');
 
 const routes = express.Router();
 
-routes.get('/ngos', async (request, response) => {
-    var result = await connection('ngos').select('*');
-    
-    console.log(result);
+routes.post('/sessions', SessionController.create);
 
-    return response.json({result});
-});
+routes.get('/ngos', NgoController.index);
+routes.post('/ngos', NgoController.create);
 
-routes.post('/ngos', async (request, response) => {
-    const {name, email, whatsapp, city, uf} = request.body;
-    const id = crypto.randomBytes(4).toString('HEX');
+routes.get('/incidents', IncidentController.index);
+routes.post('/incidents', IncidentController.create);
+routes.delete('/incidents/:id', IncidentController.delete);
 
-    await connection('ngos').insert({
-
-        id, name, email, whatsapp, city, uf
-    });
-
-    console.log(name, email, whatsapp, city, uf);
-    
-    return response.json({id});
-});
+routes.get('/profile', ProfileController.index);
 
 module.exports = routes;
