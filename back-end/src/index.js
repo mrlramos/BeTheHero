@@ -1,8 +1,10 @@
 const express = require('express');
+const routes = require('./routes');
 
 const app = express();
 
 app.use(express.json());
+app.use(routes);
 
 // Rota/Recurso
 
@@ -16,17 +18,14 @@ Tipos de parâmetros:
 Query Params: Parâmetros nomeados enviados na rota após "?" (Filtros, paginação)
 Route Params: Parâmetros utilizado para identificar recursos
 Request Body: Corpo da requisição, utilizado 
+
+Tipos de DBs:
+SQL: MySQL, SQLite, PostdreSQL, etc
+NoSQL: MongoDB, CouchDB, etc
+
+Driver: SELECT * FROM USERS;
+Query Builder(knex): table('users').select('*').where()
+
 */
-
-app.post('/users', (request, response) => {
-    const params = request.body;
-
-    console.log(params);
-    
-    return response.json({
-        evento: 'Criando uma aplicação com nodejs, react e react native',
-        aluno: 'Marlon Raoni Ramos'
-    });
-});
 
 app.listen(3333);
