@@ -13,6 +13,8 @@ module.exports = {
             .offset((page - 1) * 5)
             .select(['incidents.*', 'ngos.name', 'ngos.email', 'ngos.whatsapp', 'ngos.city', 'ngos.uf']);
 
+        console.log(result);
+
         response.header('X-Total-Count', count['count(*)']);
 
         return response.json(result);
@@ -22,11 +24,20 @@ module.exports = {
         const { title, description, value } = request.body;
         const ngo_id = request.headers.authorization;
 
-        const [id] = await connection('incidents').insert({
-            title, description, value, ngo_id
-        })
+        const ngoExist = await connection('ngos').select('*').where('id', ngo_id);
 
-        return response.json({id});
+        console.log(ngoExist[0]);
+
+        if (ngoExist[0] != null) {
+            const result = await connection('incidents').insert({
+                title, description, value, ngo_id
+            })
+
+            const id = result[0];
+            return response.json({id});
+        } else {
+            return response.status('400').json({ error: 'No NGO found with this ID.'});
+        }
     },
 
     async delete(request, response) {
